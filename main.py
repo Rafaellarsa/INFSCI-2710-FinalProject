@@ -36,12 +36,43 @@ def get_user():
     user = User()
     return jsonify(user.get_by_id(user_id))
 
+# Recipes
 
-
-@app.route('/recipes', methods=['GET'])
+@app.route('/recipes/all', methods=['GET'])
 def get_recipes():
-    recipes = Recipe()
-    return jsonify(recipes.get_all())
+    recipe = Recipe()
+    return jsonify(recipe.get_all())
+
+@app.route("/recipes", methods=['GET'])
+def get_recipe_by_id():
+    recipe_id = request.args.get('recipe_id')
+    recipe = Recipe()
+    return jsonify(recipe.get_by_id(recipe_id))
+
+@app.route('/recipes', methods=['POST'])
+def create_recipe():
+    recipe_data = request.get_json()
+    print(recipe_data)
+    recipe = Recipe(recipe_data.get("recipe_id"), recipe_data.get("title"), recipe_data.get("description"), 
+                     recipe_data.get("creation_date"), recipe_data.get("cook_time"), recipe_data.get("serving_size"),
+                     recipe_data.get("created_by"))
+    return jsonify(recipe.create())
+
+@app.route('/recipe', methods=['PUT'])
+def update_recipe():
+    recipe_data = request.get_json()
+    recipe = Recipe(recipe_data.get("recipe_id"), recipe_data.get("title"), recipe_data.get("description"), 
+                     recipe_data.get("creation_date"), recipe_data.get("cook_time"), recipe_data.get("serving_size"),
+                     recipe_data.get("created_by"))
+    return jsonify(recipe.update())
+
+@app.route('/recipes', methods=['DELETE'])
+def delete_recipe():
+    recipe_id = request.args.get('recipe_id')
+    recipe = Recipe()
+    return jsonify(recipe.delete(recipe_id))
+
+# Tags
 
 @app.route('/tags/all', methods=['GET'])
 def get_tags():

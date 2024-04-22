@@ -62,7 +62,7 @@ class Tag:
             config = Config()
             con = config.db_conn
             with con.cursor() as cur:
-                qry = " DELETE FROM tags"
+                qry = "DELETE FROM tags"
                 qry = qry + ' WHERE tag_id = %s'
                 cur.execute(qry, tag_id)
                 return {"message": ("Tag with id " + tag_id + " successfully deleted.")}

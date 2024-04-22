@@ -29,7 +29,7 @@
           }
         }
       },
-      "/recipes": {
+      "/recipes/all": {
         "get": {
           "description": "Gets all recipes",
           "produces": [
@@ -40,6 +40,103 @@
               "description": "Successful operation"
             }
           }
+        }
+      },
+      "/recipes": {
+        "get": {
+          "description": "Gets recipe by id",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "recipe_id",
+              "in": "query",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                  "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        },
+        "post": {
+          "description": "Creates new recipe",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "recipe data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/RecipeData"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "400": {
+              "description": "Invalid request data"
+            }
+          }
+        },
+        "put": {
+          "description": "Updates a recipe",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "recipe data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/RecipeData"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "400": {
+              "description": "Invalid request data"
+            }
+          }
+        },
+        "delete": {
+          "description": "Deletes a recipe",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "recipe_id",
+              "in": "query",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                  "type": "string"
+              }
+            }
+          ]
         }
       },
       "/tags/all": {
@@ -79,7 +176,7 @@
           }
         },
         "post": {
-          "description": "Create new tag",
+          "description": "Creates new tag",
           "consumes": [
             "application/json"
           ],
@@ -136,9 +233,6 @@
         },
         "delete": {
           "description": "Deletes a tag",
-          "consumes": [
-            "application/json"
-          ],
           "produces": [
             "application/json"
           ],
@@ -175,6 +269,32 @@
             "type": "string"
           },
           "description": {
+            "type": "string"
+          }
+        }
+      },
+      "RecipeData": {
+        "type": "object",
+        "properties": {
+          "cook_time": {
+            "type": "integer"
+          },
+          "created_by": {
+            "type": "integer"
+          },
+          "creation_date": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "recipe_id": {
+            "type": "integer"
+          },
+          "serving_size": {
+            "type": "integer"
+          },
+          "title": {
             "type": "string"
           }
         }
