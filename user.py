@@ -1,4 +1,3 @@
-
 import uuid
 
 from config import Config

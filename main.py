@@ -1,8 +1,9 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_swagger_ui import get_swaggerui_blueprint
 
 from user import User
 from recipe import Recipe
+from tag import Tag
 
 app = Flask(__name__)  
 
@@ -29,8 +30,9 @@ def index():
     </ul>
     Please go to "/swagger" or <a href="/swagger">click here</a> to test the endpoints."""
 
-@app.route("/users/<user_id>", methods=['GET'])
-def get_user(user_id):
+@app.route("/users", methods=['GET'])
+def get_user():
+    user_id = request.args.get('user_id')
     user = User()
     return jsonify(user.get_by_id(user_id))
 
@@ -40,4 +42,28 @@ def get_recipes():
     recipes = Recipe()
     return jsonify(recipes.get_all())
 
-app.run()
+@app.route('/tags', methods=['GET'])
+def get_tags():
+    tags = Tag()
+    return jsonify(tags.get_all())
+
+@app.route('/tags', methods=['POST'])
+def create_tag():
+    tag_data = request.get_json()
+    tags = Tag(tag_data.get("tag_id"), tag_data.get("name"), tag_data.get("description"))
+    return jsonify(tags.create())
+
+@app.route('/tags', methods=['PUT'])
+def update_tag():
+    tag_data = request.get_json()
+    tags = Tag(tag_data.get("tag_id"), tag_data.get("name"), tag_data.get("description"))
+    return jsonify(tags.update())
+
+@app.route('/tags', methods=['DELETE'])
+def delete_tag():
+    tag_id = request.args.get('tag_id')
+    tags = Tag()
+    return jsonify(tags.delete(tag_id))
+
+if __name__=="__main__":
+    app.run(debug=True)

@@ -5,15 +5,136 @@
       "version": "1.0.0"
     },
     "paths": {
-      "/": {
+      "/users": {
         "get": {
-          "description": "Returns message showing app is up",
+          "description": "Gets user by id",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "query",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                  "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      },
+      "/recipes": {
+        "get": {
+          "description": "Gets all recipes",
           "produces": [
             "application/json"
           ],
           "responses": {
             "200": {
               "description": "Successful operation"
+            }
+          }
+        }
+      },
+      "/tags": {
+        "get": {
+          "description": "Gets all tags",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        },
+        "post": {
+          "description": "Create new tag",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "tag data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/TagData"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "400": {
+              "description": "Invalid request data"
+            }
+          }
+        },
+        "put": {
+          "description": "Updates a tag",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "tag data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/TagData"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "400": {
+              "description": "Invalid request data"
+            }
+          }
+        },
+        "delete": {
+          "description": "Deletes a tag",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "tag_id",
+              "in": "query",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                  "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "400": {
+              "description": "Invalid request data"
             }
           }
         }
@@ -50,13 +171,16 @@
       }
     },
     "definitions": {
-      "AccessData": {
+      "TagData": {
         "type": "object",
         "properties": {
+          "tag_id": {
+            "type": "integer"
+          },
           "name": {
             "type": "string"
           },
-          "server": {
+          "description": {
             "type": "string"
           }
         }
