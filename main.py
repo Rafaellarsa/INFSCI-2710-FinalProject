@@ -1,27 +1,27 @@
-import pymysql.cursors
+from flask import Flask, jsonify
 
-import os
-from dotenv import load_dotenv 
-load_dotenv() 
+from user import User
+from recipe import Recipe
 
-db_connection = pymysql.connect(host=os.getenv("HOST"),
-                             user=os.getenv("USER"),
-                             password=os.getenv("PASSWORD"),
-                             db='student_meal_express',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+app = Flask(__name__)    
 
-try:
+@app.route("/")
+def index():
+    return """
+    <p>Hello, Welcome to Student Meal Express!</p>
+    <p>These are our endpoints:</p> <ul>
+    <li>get_user - /users/<user_id></li>
+    </ul>"""
 
-    with db_connection.cursor() as cur:
+@app.route("/users/<user_id>", methods=['GET'])
+def get_user(user_id):
+    user = User()
+    return jsonify(user.get_by_id(user_id))
 
-        cur.execute('SELECT * FROM recipes')
 
-        rows = cur.fetchall()
+@app.route('/recipes', methods=['GET'])
+def get_recipes():
+    recipes = Recipe()
+    return jsonify(recipes.get_all())
 
-        for row in rows:
-            print(row)
-
-finally:
-
-    db_connection.close()
+app.run()
