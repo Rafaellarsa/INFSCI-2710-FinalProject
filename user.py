@@ -8,7 +8,6 @@ class User:
         self.__username = username
         self.__email = email
         if user_id == "" and username != "":
-            self.__user_id = str(uuid.uuid4())
             try: 
                 config = Config()
                 con = config.db_conn
