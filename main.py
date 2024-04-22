@@ -37,15 +37,22 @@ def get_user():
     return jsonify(user.get_by_id(user_id))
 
 
+
 @app.route('/recipes', methods=['GET'])
 def get_recipes():
     recipes = Recipe()
     return jsonify(recipes.get_all())
 
-@app.route('/tags', methods=['GET'])
+@app.route('/tags/all', methods=['GET'])
 def get_tags():
     tags = Tag()
     return jsonify(tags.get_all())
+
+@app.route("/tags", methods=['GET'])
+def get_tag_by_id():
+    tag_id = request.args.get('tag_id')
+    tags = Tag()
+    return jsonify(tags.get_by_id(tag_id))
 
 @app.route('/tags', methods=['POST'])
 def create_tag():

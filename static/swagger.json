@@ -42,11 +42,35 @@
           }
         }
       },
-      "/tags": {
+      "/tags/all": {
         "get": {
           "description": "Gets all tags",
           "produces": [
             "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      },
+      "/tags": {
+        "get": {
+          "description": "Gets tag by id",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "tag_id",
+              "in": "query",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                  "type": "string"
+              }
+            }
           ],
           "responses": {
             "200": {
@@ -132,36 +156,6 @@
           "responses": {
             "200": {
               "description": "Successful operation"
-            },
-            "400": {
-              "description": "Invalid request data"
-            }
-          }
-        }
-      },
-      "/access": {
-        "post": {
-          "description": "Grants access to an user",
-          "consumes": [
-            "application/json"
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "name": "access data",
-              "in": "body",
-              "description": "JSON data for the api",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/AccessData"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "User granted access"
             },
             "400": {
               "description": "Invalid request data"
