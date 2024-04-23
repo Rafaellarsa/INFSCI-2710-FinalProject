@@ -28,9 +28,9 @@ class User:
             config = Config()
             con = config.db_conn
             with con.cursor() as cur:
-                qry = "SELECT * FROM users WHERE user_id = '" + user_id + "'"
-                print(qry)
-                cur.execute(qry)
+                qry = "SELECT * FROM users"
+                qry = qry + ' WHERE user_id = %s'
+                cur.execute(qry, user_id)
                 data = cur.fetchall()
                 return data
         finally:
@@ -42,7 +42,7 @@ class User:
             con = config.db_conn
             with con.cursor() as cur:
                 qry = 'INSERT INTO users (user_id, username, email, password_hash, join_date, is_active)'
-                qry = qry + ' VALUES(%s, %s, %s, %s, %s, %s, %s)'
+                qry = qry + ' VALUES(%s, %s, %s, %s, %s, %s)'
                 cur.execute(qry, (self.__user_id, self.__username, self.__email, self.__password_hash, self.__join_date, self.__is_active)) 
                         
                 con.commit()
@@ -59,7 +59,7 @@ class User:
                 qry = qry + ' SET username = %s, email = %s,  password_hash = %s, join_date = %s, is_active = %s'
                 qry = qry + ' WHERE user_id = %s'
                 cur.execute(qry, (self.__username, self.__email, self.__password_hash, self.__join_date, 
-                                  self.__is_active)) 
+                                  self.__is_active, self.__user_id)) 
                 con.commit()
                 return self.get_by_id(self.__user_id)
         finally:
