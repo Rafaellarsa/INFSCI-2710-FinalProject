@@ -5,6 +5,19 @@
       "version": "1.0.0"
     },
     "paths": {
+      "/users/all": {
+        "get": {
+          "description": "Gets all users",
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            }
+          }
+        }
+      },
       "/users": {
         "get": {
           "description": "Gets user by id",
@@ -27,6 +40,79 @@
               "description": "Successful operation"
             }
           }
+        },
+        "post": {
+          "description": "Creates new user",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "user data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UserData"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "400": {
+              "description": "Invalid request data"
+            }
+          }
+        },
+        "put": {
+          "description": "Updates a user",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "user data",
+              "in": "body",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UserData"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation"
+            },
+            "400": {
+              "description": "Invalid request data"
+            }
+          }
+        },
+        "delete": {
+          "description": "Deletes a user",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "user_id",
+              "in": "query",
+              "description": "JSON data for the api",
+              "required": true,
+              "schema": {
+                  "type": "string"
+              }
+            }
+          ]
         }
       },
       "/recipes/all": {
@@ -259,23 +345,35 @@
       }
     },
     "definitions": {
-      "TagData": {
+      "UserData": {
         "type": "object",
         "properties": {
-          "tag_id": {
+          "user_id": {
             "type": "integer"
           },
-          "name": {
+          "username": {
             "type": "string"
           },
-          "description": {
+          "email": {
             "type": "string"
+          },
+          "password_hash": {
+            "type": "string"
+          },
+          "join_date": {
+            "type": "string"
+          },
+          "is_active": {
+            "type": "boolean"
           }
         }
       },
       "RecipeData": {
         "type": "object",
         "properties": {
+          "recipe_id": {
+            "type": "integer"
+          },
           "cook_time": {
             "type": "integer"
           },
@@ -288,13 +386,24 @@
           "description": {
             "type": "string"
           },
-          "recipe_id": {
-            "type": "integer"
-          },
           "serving_size": {
             "type": "integer"
           },
           "title": {
+            "type": "string"
+          }
+        }
+      },
+      "TagData": {
+        "type": "object",
+        "properties": {
+          "tag_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
             "type": "string"
           }
         }

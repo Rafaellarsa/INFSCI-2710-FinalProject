@@ -3,54 +3,23 @@ import uuid
 from config import Config
 
 class User:
-    def __init__(self, user_id="", username = "", email = ""):
+    def __init__(self, user_id="", username = "", email = "", password_hash = "", join_date = "", is_active = ""):
+        self.__user_id = user_id
         self.__username = username
         self.__email = email
-        if user_id == "" and username != "":
-            try: 
-                config = Config()
-                con = config.db_conn
-                with con.cursor() as cur:
-                    qry = 'INSERT INTO users (user_id, username, email)'
-                    qry = qry + 'VALUES(%s, %s, %s)'
-                    print(qry)
-                    cur.execute(qry, (self.__user_id, self.__username, self.__email)) 
-                    con.commit()
-            finally:
-                con.close()
+        self.__password_hash = password_hash
+        self.__join_date = join_date
+        self.__is_active = is_active
 
-    def get_username(self):
-        return self.__username
-    
-    def get_email(self):
-        return self.__email
-    
-    def get_user_id(self):
-        return self.__user_id
-
-    def set_username(self, username):
-        self.__username = username
-        try: 
+    def get_all(self):
+        try:
             config = Config()
             con = config.db_conn
             with con.cursor() as cur:
-                qry = 'UPDATE user SET username = %s WHERE user_id = %s;'
-                print(qry)
-                cur.execute(qry, (self.__username, self.__user_id)) 
-                con.commit()
-        finally:
-            con.close()
-    
-    def set_email(self, email):
-        self.__email = email
-        try: 
-            config = Config()
-            con = config.db_conn
-            with con.cursor() as cur:
-                qry = 'UPDATE user SET email = %s WHERE user_id = %s;'
-                print(qry)
-                cur.execute(qry, (self.__email, self.__user_id)) 
-                con.commit()
+                qry = "SELECT * FROM users"
+                cur.execute(qry)
+                data = cur.fetchall()
+                return data
         finally:
             con.close()
 
@@ -64,5 +33,46 @@ class User:
                 cur.execute(qry)
                 data = cur.fetchall()
                 return data
+        finally:
+            con.close()
+
+    def create(self):
+        try: 
+            config = Config()
+            con = config.db_conn
+            with con.cursor() as cur:
+                qry = 'INSERT INTO users (user_id, username, email, password_hash, join_date, is_active)'
+                qry = qry + ' VALUES(%s, %s, %s, %s, %s, %s, %s)'
+                cur.execute(qry, (self.__user_id, self.__username, self.__email, self.__password_hash, self.__join_date, self.__is_active)) 
+                        
+                con.commit()
+                return self.get_by_id(self.__user_id)
+        finally:
+            con.close()
+
+    def update(self):
+        try: 
+            config = Config()
+            con = config.db_conn
+            with con.cursor() as cur:
+                qry = "UPDATE users"
+                qry = qry + ' SET username = %s, email = %s,  password_hash = %s, join_date = %s, is_active = %s'
+                qry = qry + ' WHERE user_id = %s'
+                cur.execute(qry, (self.__username, self.__email, self.__password_hash, self.__join_date, 
+                                  self.__is_active)) 
+                con.commit()
+                return self.get_by_id(self.__user_id)
+        finally:
+            con.close()
+
+    def delete(self, user_id):
+        try:
+            config = Config()
+            con = config.db_conn
+            with con.cursor() as cur:
+                qry = "DELETE FROM users"
+                qry = qry + ' WHERE user_id = %s'
+                cur.execute(qry, user_id)
+                return {"message": ("User with id " + user_id + " successfully deleted.")}
         finally:
             con.close()

@@ -30,11 +30,38 @@ def index():
     </ul>
     Please go to "/swagger" or <a href="/swagger">click here</a> to test the endpoints."""
 
+# Users
+
+@app.route('/users/all', methods=['GET'])
+def get_users():
+    user = User()
+    return jsonify(user.get_all())
+
 @app.route("/users", methods=['GET'])
 def get_user():
     user_id = request.args.get('user_id')
     user = User()
     return jsonify(user.get_by_id(user_id))
+
+@app.route('/users', methods=['POST'])
+def create_user():
+    user_data = request.get_json()
+    user = User(user_data.get("user_id"), user_data.get("username"), user_data.get("email"), 
+                     user_data.get("password_hash"), user_data.get("join_date"), user_data.get("is_active"))
+    return jsonify(user.create())
+
+@app.route('/users', methods=['PUT'])
+def update_user():
+    user_data = request.get_json()
+    user = User(user_data.get("user_id"), user_data.get("username"), user_data.get("email"), 
+                     user_data.get("password_hash"), user_data.get("join_date"), user_data.get("is_active"))
+    return jsonify(user.update())
+
+@app.route('/users', methods=['DELETE'])
+def delete_user():
+    user_id = request.args.get('user_id')
+    user = User()
+    return jsonify(user.delete(user_id))
 
 # Recipes
 
@@ -52,13 +79,12 @@ def get_recipe_by_id():
 @app.route('/recipes', methods=['POST'])
 def create_recipe():
     recipe_data = request.get_json()
-    print(recipe_data)
     recipe = Recipe(recipe_data.get("recipe_id"), recipe_data.get("title"), recipe_data.get("description"), 
                      recipe_data.get("creation_date"), recipe_data.get("cook_time"), recipe_data.get("serving_size"),
                      recipe_data.get("created_by"))
     return jsonify(recipe.create())
 
-@app.route('/recipe', methods=['PUT'])
+@app.route('/recipes', methods=['PUT'])
 def update_recipe():
     recipe_data = request.get_json()
     recipe = Recipe(recipe_data.get("recipe_id"), recipe_data.get("title"), recipe_data.get("description"), 
